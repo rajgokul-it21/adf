@@ -7,7 +7,7 @@
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Get Metadata_FROM_BLOB",
+						"activity": "Get Metadata_FROM_BLOB_ORDERS",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Get Metadata_FROM_BLOB').output.childItems",
+						"value": "@activity('Get Metadata_FROM_BLOB_ORDERS').output.childItems",
 						"type": "Expression"
 					},
 					"activities": [
@@ -90,7 +90,7 @@
 				}
 			},
 			{
-				"name": "Get Metadata_FROM_BLOB",
+				"name": "Get Metadata_FROM_BLOB_ORDERS",
 				"type": "GetMetadata",
 				"dependsOn": [],
 				"policy": {
