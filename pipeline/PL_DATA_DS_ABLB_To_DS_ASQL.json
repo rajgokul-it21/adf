@@ -47,7 +47,9 @@
 								"sink": {
 									"type": "AzureSqlSink",
 									"writeBehavior": "insert",
-									"sqlWriterUseTableLock": false
+									"sqlWriterUseTableLock": false,
+									"tableOption": "autoCreate",
+									"disableMetricsCollection": false
 								},
 								"enableStaging": false,
 								"translator": {
@@ -61,11 +63,11 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "DelimitedText2",
+									"referenceName": "DelimitedText3_data",
 									"type": "DatasetReference",
 									"parameters": {
 										"items": {
-											"value": "@item()",
+											"value": "@item().name",
 											"type": "Expression"
 										}
 									}
@@ -101,7 +103,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "DelimitedText1",
+						"referenceName": "DelimitedText3",
 						"type": "DatasetReference"
 					},
 					"fieldList": [

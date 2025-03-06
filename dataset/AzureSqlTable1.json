@@ -7,7 +7,7 @@
 		},
 		"parameters": {
 			"tables": {
-				"type": "String"
+				"type": "string"
 			}
 		},
 		"annotations": [],
