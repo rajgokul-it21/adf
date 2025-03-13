@@ -1,0 +1,289 @@
+{
+	"name": "pipeline1",
+	"properties": {
+		"activities": [
+			{
+				"name": "Lookup1",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "SELECT TABLE_NAME \nFROM INFORMATION_SCHEMA.TABLES \nWHERE TABLE_TYPE = 'BASE TABLE';\n",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "SqlServerTable1",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Lookup1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Lookup1').output.value",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Copy data1",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"sqlReaderQuery": "SELECT \n    CAST(REVENUE_TYPE AS INT) AS REVENUE_TYPE, \n    * \nFROM transactions;\n",
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "SnowflakeV2Sink",
+									"importSettings": {
+										"type": "SnowflakeImportCopyCommand"
+									}
+								},
+								"enableStaging": true,
+								"stagingSettings": {
+									"linkedServiceName": {
+										"referenceName": "linkedService1_blob",
+										"type": "LinkedServiceReference"
+									},
+									"path": "input"
+								},
+								"translator": {
+									"type": "TabularTranslator",
+									"mappings": [
+										{
+											"source": {
+												"name": "customer_id",
+												"type": "Int16"
+											},
+											"sink": {
+												"name": "CUSTOMER_ID",
+												"type": "Int64"
+											}
+										},
+										{
+											"source": {
+												"name": "product_id",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PRODUCT_ID",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "payment_month",
+												"type": "DateTime"
+											},
+											"sink": {
+												"name": "PAYMENT_MONTH",
+												"type": "DateTime"
+											}
+										},
+										{
+											"source": {
+												"name": "REVENUE_TYPE",
+												"type": "Int32"
+											},
+											"sink": {
+												"name": "REVENUE_TYPE",
+												"type": "Int64"
+											}
+										},
+										{
+											"source": {
+												"name": "revenue",
+												"type": "Double"
+											},
+											"sink": {
+												"name": "REVENUE",
+												"type": "Int64"
+											}
+										},
+										{
+											"source": {
+												"name": "quantity",
+												"type": "Byte"
+											},
+											"sink": {
+												"name": "QUANTITY",
+												"type": "Int64"
+											}
+										},
+										{
+											"source": {
+												"name": "dimension_1",
+												"type": "String"
+											},
+											"sink": {
+												"name": "DIMENSION_1",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "dimension_2",
+												"type": "String"
+											},
+											"sink": {
+												"name": "DIMENSION_2",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "dimension_3",
+												"type": "String"
+											},
+											"sink": {
+												"name": "DIMENSION_3",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "dimension_4",
+												"type": "String"
+											},
+											"sink": {
+												"name": "DIMENSION_4",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "dimension_5",
+												"type": "String"
+											},
+											"sink": {
+												"name": "DIMENSION_5",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "dimension_6",
+												"type": "String"
+											},
+											"sink": {
+												"name": "DIMENSION_6",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "dimension_7",
+												"type": "String"
+											},
+											"sink": {
+												"name": "DIMENSION_7",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "dimension_8",
+												"type": "String"
+											},
+											"sink": {
+												"name": "DIMENSION_8",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "dimension_9",
+												"type": "String"
+											},
+											"sink": {
+												"name": "DIMENSION_9",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "dimension_10",
+												"type": "String"
+											},
+											"sink": {
+												"name": "DIMENSION_10",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "companies",
+												"type": "String"
+											},
+											"sink": {
+												"name": "COMPANIES",
+												"type": "String"
+											}
+										}
+									]
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "SqlServerTable2",
+									"type": "DatasetReference",
+									"parameters": {
+										"TableName": {
+											"value": "@item().TABLE_NAME",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "SnowflakeTable1",
+									"type": "DatasetReference",
+									"parameters": {
+										"TableName": {
+											"value": "@item().TABLE_NAME",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"annotations": []
+	}
+}
